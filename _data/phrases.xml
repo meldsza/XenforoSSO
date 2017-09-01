@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="option.sso_registration" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[SSO Registration URL]]></phrase>
+  <phrase title="option.sso_secret" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[SSO secret]]></phrase>
+  <phrase title="option.sso_url" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[SSO URL]]></phrase>
+  <phrase title="option_explain.sso_registration" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Redirects visitors to this url when they try to register]]></phrase>
+  <phrase title="option_explain.sso_secret" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[keep this a secret]]></phrase>
+  <phrase title="option_explain.sso_url" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[]]></phrase>
+  <phrase title="option_group.sso" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[SSO]]></phrase>
+  <phrase title="option_group_description.sso" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[]]></phrase>
+</phrases>

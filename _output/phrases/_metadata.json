@@ -1,0 +1,50 @@
+{
+    "option.sso_registration.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "c4aa2619ce89bb209a4c28b25d03469b"
+    },
+    "option.sso_secret.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "1aea7f3eeb3884d2076008360a18b3ae"
+    },
+    "option.sso_url.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "bc72786c49c6b6e0c8c65bec41c15967"
+    },
+    "option_explain.sso_registration.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "e63e6c1166cc0c58646902617fcdff3f"
+    },
+    "option_explain.sso_secret.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "0c9ee6fce9025863077e631cffffa01d"
+    },
+    "option_explain.sso_url.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "option_group.sso.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "46fd54ea2401d27e9da8c70f78b70f28"
+    },
+    "option_group_description.sso.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+    }
+}

@@ -1,0 +1,1 @@
+Redirects visitors to this url when they try to register
