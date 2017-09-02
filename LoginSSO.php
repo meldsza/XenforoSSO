@@ -105,4 +105,8 @@ class LoginSSO extends Login
             return $this->error('SIG MISMATCH', 500);
         }
     }
+    protected function getUserGroupChangeService()
+	{
+		return $this->app()->service('XF:User\UserGroupChange');
+	}
 }
