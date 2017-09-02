@@ -63,7 +63,24 @@ class LoginSSO extends Login
             $loginPlugin->completeLogin($user, false);
             
             if(isset($payload["add_groups"]))
-                $this->getUserGroupChangeService()->addUserGroupChange($user->user_id, 'sso_group_add', $payload["add_groups"]);
+	    {
+		$groups = $this->em()->getRepository('XF:UserGroup')->getUserGroupTitlePairs();
+		$payload["add_groups"] = explode(',',$payload["add_groups"]);
+		$payload["add_groups"] = array_map(
+			function($g)use($groups){
+				if(isset($groups[$g]))
+					return $groups[$g];
+				else
+					return false;
+			}
+			,$payload["add_groups"]
+		);
+		$payload["add_groups"] = array_filter($payload["add_groups"],
+			     function($g){
+				return !!$g;
+			     });
+                $this->getUserGroupChangeService()->addUserGroupChange($user->user_id, 'sso_group_add', );
+	    }
             
             if(isset($payload["moderator"]) && $payload["moderator"] == "true")
             { 
