@@ -61,6 +61,43 @@ class LoginSSO extends Login
                 $user = $registration->save();
             }
             $loginPlugin->completeLogin($user, false);
+            
+            if(isset($payload["add_groups"]))
+                $this->getUserGroupChangeService()->addUserGroupChange($user->user_id, 'sso_group_add', $payload["add_groups"]);
+            
+            if(isset($payload["moderator"]) && $payload["moderator"] == "true")
+            { 
+                $generalModerator = $this->em()->find('XF:Moderator', $user->user_id);
+                if (!$generalModerator)
+                {
+                    $generalModerator = $this->em()->create('XF:Moderator');
+                    $generalModerator->user_id = $user->user_id;
+                    $generalModerator->is_super_moderator = true;
+                    $generalModerator->save();
+                }
+            }
+            else
+            {
+                $generalModerator = $this->em()->find('XF:Moderator', $user->user_id);
+                if ($generalModerator)
+                    $generalModerator->delete();
+            }
+            if(isset($payload["admin"]) && $payload["admin"] == "true")
+            { 
+                $superAdmin = $this->em()->find('XF:Admin', $user->user_id);
+                if (!$superAdmin)
+                {
+                    $superAdmin = $this->em()->create('XF:Admin');
+                    $superAdmin->user_id = $user->user_id;
+                    $superAdmin->is_super_admin = true;
+                    $superAdmin->save();
+                }
+            }
+            else{
+                $superAdmin = $this->em()->find('XF:Admin', $user->user_id);
+                if ($superAdmin)
+                    $superAdmin->delete();
+            }
             return $this->redirect($this->buildLink('forums'));
         }
         else
