@@ -71,14 +71,10 @@ class LoginSSO extends Login
 				if(isset($groups[$g]))
 					return $groups[$g];
 				else
-					return false;
+					return null;
 			}
 			,$payload["add_groups"]
 		);
-		$payload["add_groups"] = array_filter($payload["add_groups"],
-			     function($g){
-				return !!$g;
-			     });
                 $this->getUserGroupChangeService()->addUserGroupChange($user->user_id, 'sso_group_add', $payload["add_groups"]);
 	    }
             
