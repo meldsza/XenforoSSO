@@ -79,7 +79,7 @@ class LoginSSO extends Login
 			     function($g){
 				return !!$g;
 			     });
-                $this->getUserGroupChangeService()->addUserGroupChange($user->user_id, 'sso_group_add', );
+                $this->getUserGroupChangeService()->addUserGroupChange($user->user_id, 'sso_group_add', $payload["add_groups"]);
 	    }
             
             if(isset($payload["moderator"]) && $payload["moderator"] == "true")
