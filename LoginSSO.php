@@ -64,12 +64,13 @@ class LoginSSO extends Login
             
             if(isset($payload["add_groups"]))
 	    {
-		$groups = $this->em()->getRepository('XF:UserGroup')->getUserGroupTitlePairs();
+		$group_finder = \XF::->finder('XF:UserGroup');
 		$payload["add_groups"] = explode(',',$payload["add_groups"]);
 		$payload["add_groups"] = array_map(
-			function($g)use($groups){
-				if(isset($groups[$g]))
-					return $groups[$g];
+			function($g)use($group_repo){
+				$group = $group_finder->where('title',$g)->fetchOne();
+				if(isset($group))
+					return $group->user_group_id;
 				else
 					return null;
 			}
