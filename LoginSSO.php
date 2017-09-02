@@ -67,7 +67,7 @@ class LoginSSO extends Login
 		$group_finder = \XF::finder('XF:UserGroup');
 		$payload["add_groups"] = explode(',',$payload["add_groups"]);
 		$payload["add_groups"] = array_map(
-			function($g)use($group_repo){
+			function($g)use($group_finder){
 				$group = $group_finder->where('title',$g)->fetchOne();
 				if(isset($group))
 					return $group->user_group_id;
