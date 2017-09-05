@@ -49,10 +49,9 @@ class LoginSSO extends Login
                 return $this->error("NOUNCE MISMATCH", 500);
             }
             $loginPlugin = $this->plugin('XF:Login');
-            $field_present = false;
-            $user = $this->em()->findOne('XF:UserFieldValue', ['field_id' => $this->options()->sso_external_id, 'field_value' => $payload["external_id"]]);
+            $field = $this->em()->findOne('XF:UserFieldValue', ['field_id' => $this->options()->sso_external_id, 'field_value' => $payload["external_id"]]);
                 
-            if (!isset($user)) {
+            if (!isset($field)) {
                 if (!$this->options()->sso_use_email) {
                     $user = $this->em()->findOne('XF:User', ['username' => $payload["username"]]);
                 } else {
@@ -60,7 +59,7 @@ class LoginSSO extends Login
                 }
             } else {
                 $field_present = true;
-                $user = $this->em()->findOne('XF:User', ['user_id' => $user->user_id]);
+                $user = $this->em()->findOne('XF:User', ['user_id' => $field->user_id]);
             }
             if (!isset($user)) {
                 $registration = $this->service('XF:User\Registration');
@@ -69,9 +68,12 @@ class LoginSSO extends Login
                 $registration->getUser()->setOption('skip_email_confirm', true);
                 $user = $registration->save();
             }
-            if (!$field_present && $this->options()->sso_external_id != 'email') {
-                $field = $this->em()->create('XF:UserFieldValue');
-                $field->user_id = $user->user_id;
+            if (!isset($field) && $this->options()->sso_external_id != 'email') {
+                $field = $this->em()->findOne('XF:UserFieldValue', ['field_id' => $this->options()->sso_external_id, 'user_id' => $user->id]);
+                if (!isset($field)) {
+                    $field = $this->em()->create('XF:UserFieldValue');
+                    $field->user_id = $user->user_id;
+                }
                 $field->field_id = $this->options()->sso_external_id;
                 $field->field_value = $payload["external_id"];
                 $field->save();
