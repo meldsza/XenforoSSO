@@ -1,4 +1,10 @@
 {
+    "option.sso_external_id.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "bf25c753e9b1ecc23894b086ac41bd3e"
+    },
     "option.sso_registration.txt": {
         "global_cache": false,
         "version_id": 1000010,
@@ -17,6 +23,18 @@
         "version_string": "1.0.0 Alpha",
         "hash": "bc72786c49c6b6e0c8c65bec41c15967"
     },
+    "option.sso_use_email.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "5b9dad8d89a05041f49c3e993f9b4144"
+    },
+    "option_explain.sso_external_id.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+    },
     "option_explain.sso_registration.txt": {
         "global_cache": false,
         "version_id": 1000010,
@@ -30,6 +48,12 @@
         "hash": "0c9ee6fce9025863077e631cffffa01d"
     },
     "option_explain.sso_url.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "option_explain.sso_use_email.txt": {
         "global_cache": false,
         "version_id": 1000010,
         "version_string": "1.0.0 Alpha",

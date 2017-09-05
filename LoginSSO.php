@@ -9,29 +9,27 @@ use XF\Pub\Controller\Login;
 
 class LoginSSO extends Login
 {
-	public function actionIndex()
-	{
+    public function actionIndex()
+    {
         $session = $this->session();
-        if($this->filter('sso','str'))
-        {
+        if ($this->filter('sso', 'str')) {
             return $this->login();
-        }
-        else
-        {
+        } else {
             $sso = $this->randomNumber(10);
-            $session->set('sso_nounce',$sso);
+            $session->set('sso_nounce', $sso);
             $session->save();
             $sso = "nounce=$sso&return_sso_url=".$this->request->getHostUrl().'/login';
             $sso = base64_encode($sso);
-            $sig = hash_hmac('sha256', $sso, $this->options()->sso_secret);  
-            $sso_url = $this->options()->sso_url;          
+            $sig = hash_hmac('sha256', $sso, $this->options()->sso_secret);
+            $sso_url = $this->options()->sso_url;
             return $this->redirect("$sso_url?sso=$sso&sig=$sig");
         }
     }
-    function randomNumber($length) {
+    function randomNumber($length)
+    {
         $result = '';
     
-        for($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; $i++) {
             $result .= mt_rand(0, 9);
         }
     
@@ -40,20 +38,29 @@ class LoginSSO extends Login
     public function login()
     {
         $session = $this->session();
-        $sso = urldecode($this->filter('sso','str'));
+        $sso = urldecode($this->filter('sso', 'str'));
         $sig = hash_hmac('sha256', $sso, $this->options()->sso_secret);
-        if($sig == $this->filter('sig','str'))
-        {
+        if ($sig == $this->filter('sig', 'str')) {
             $sso = base64_decode($sso);
             parse_str($sso, $payload);
             
             $nounce = $session->get('sso_nounce');
-            if($nounce != $payload["nounce"] )
+            if ($nounce != $payload["nounce"]) {
                 return $this->error("NOUNCE MISMATCH", 500);
+            }
             $loginPlugin = $this->plugin('XF:Login');
-            $user = $this->em()->findOne('XF:User', ['email' => $payload["email"]]);
-            if (!isset($user))
-            {
+            $user = $this->em()->findOne('XF:UserFieldValue', ['field_id' => $this->options()->sso_external_id, 'field_value' => $payload["external_id"]]);
+                
+            if (!isset($user)) {
+                if (!$this->options()->sso_use_email) {
+                    $user = $this->em()->findOne('XF:User', ['username' => $payload["username"]]);
+                } else {
+                    $user = $this->em()->findOne('XF:User', ['email' => $payload["email"]]);
+                }
+            } else {
+                $user = $this->em()->findOne('XF:User', ['user_id' => $user->user_id]);
+            }
+            if (!isset($user)) {
                 $registration = $this->service('XF:User\Registration');
                 $registration->setFromInput($payload);
                 $registration->setNoPassword();
@@ -62,65 +69,57 @@ class LoginSSO extends Login
             }
             $loginPlugin->completeLogin($user, false);
             
-            if(isset($payload["add_groups"]))
-	    {
-		$group_finder = \XF::finder('XF:UserGroup');
-		$payload["add_groups"] = explode(',',$payload["add_groups"]);
-		$payload["add_groups"] = array_map(
-			function($g)use($group_finder){
-				$group = $group_finder->where('title',$g)->fetchOne();
-				if(isset($group))
-					return $group->user_group_id;
-				else
-					return null;
-			}
-			,$payload["add_groups"]
-		);
+            if (isset($payload["add_groups"])) {
+                $group_finder = \XF::finder('XF:UserGroup');
+                $payload["add_groups"] = explode(',', $payload["add_groups"]);
+                $payload["add_groups"] = array_map(
+                function ($g) use ($group_finder) {
+                    $group = $group_finder->where('title', $g)->fetchOne();
+                    if (isset($group)) {
+                        return $group->user_group_id;
+                    } else {
+                        return null;
+                    }
+                }, $payload["add_groups"]
+                );
                 $this->getUserGroupChangeService()->addUserGroupChange($user->user_id, 'sso_group_add', $payload["add_groups"]);
-	    }
+            }
             
-            if(isset($payload["moderator"]) && $payload["moderator"] == "true")
-            { 
+            if (isset($payload["moderator"]) && $payload["moderator"] == "true") {
                 $generalModerator = $this->em()->find('XF:Moderator', $user->user_id);
-                if (!$generalModerator)
-                {
+                if (!$generalModerator) {
                     $generalModerator = $this->em()->create('XF:Moderator');
                     $generalModerator->user_id = $user->user_id;
                     $generalModerator->is_super_moderator = true;
                     $generalModerator->save();
                 }
-            }
-            else
-            {
+            } else {
                 $generalModerator = $this->em()->find('XF:Moderator', $user->user_id);
-                if ($generalModerator)
+                if ($generalModerator) {
                     $generalModerator->delete();
+                }
             }
-            if(isset($payload["admin"]) && $payload["admin"] == "true")
-            { 
+            if (isset($payload["admin"]) && $payload["admin"] == "true") {
                 $superAdmin = $this->em()->find('XF:Admin', $user->user_id);
-                if (!$superAdmin)
-                {
+                if (!$superAdmin) {
                     $superAdmin = $this->em()->create('XF:Admin');
                     $superAdmin->user_id = $user->user_id;
                     $superAdmin->is_super_admin = true;
                     $superAdmin->save();
                 }
-            }
-            else{
+            } else {
                 $superAdmin = $this->em()->find('XF:Admin', $user->user_id);
-                if ($superAdmin)
+                if ($superAdmin) {
                     $superAdmin->delete();
+                }
             }
             return $this->redirect($this->buildLink('forums'));
-        }
-        else
-        {
+        } else {
             return $this->error('SIG MISMATCH', 500);
         }
     }
     protected function getUserGroupChangeService()
-	{
-		return $this->app()->service('XF:User\UserGroupChange');
-	}
+    {
+        return $this->app()->service('XF:User\UserGroupChange');
+    }
 }

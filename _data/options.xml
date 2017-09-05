@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <options>
+  <option option_id="sso_external_id" edit_format="textbox" data_type="string">
+    <default_value>email</default_value>
+    <relation group_id="sso" display_order="1"/>
+  </option>
   <option option_id="sso_registration" edit_format="textbox" data_type="string">
     <default_value/>
     <relation group_id="sso" display_order="1"/>
@@ -9,6 +13,10 @@
     <relation group_id="sso" display_order="1"/>
   </option>
   <option option_id="sso_url" edit_format="textbox" data_type="string">
+    <default_value/>
+    <relation group_id="sso" display_order="1"/>
+  </option>
+  <option option_id="sso_use_email" edit_format="onoff" data_type="boolean">
     <default_value/>
     <relation group_id="sso" display_order="1"/>
   </option>

@@ -1,4 +1,7 @@
 {
+    "sso_external_id.json": {
+        "hash": "682f1268b88f886fdf93d471f0ff432c"
+    },
     "sso_registration.json": {
         "hash": "da79c67653b036082765c60181ca04cc"
     },
@@ -7,5 +10,8 @@
     },
     "sso_url.json": {
         "hash": "da79c67653b036082765c60181ca04cc"
+    },
+    "sso_use_email.json": {
+        "hash": "bc5fc5abb4956cc69876a25e19530cf2"
     }
 }
