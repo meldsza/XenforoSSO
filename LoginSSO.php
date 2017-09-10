@@ -71,12 +71,12 @@ class LoginSSO extends Login
             if (!isset($field) && $this->options()->sso_external_id != 'email') {
                 $field = $this->em()->findOne('XF:UserFieldValue', ['field_id' => $this->options()->sso_external_id, 'user_id' => $user->id]);
                 if (isset($field)) {
-                    $this->db()->update('xf_user_field_value',
+                    \XF::db()->update('xf_user_field_value',
                     ['field_id' =>$payload["external_id"] ],
                     'field_value = ?', $user->id
                     );
                 } else {
-                    $this->db()->insert('xf_user_field_value',
+                    \XF::db()->insert('xf_user_field_value',
                     ['field_id' =>$payload["external_id"] ],
                     'field_value = ?', $user->id
                     );
