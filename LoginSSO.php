@@ -73,12 +73,12 @@ class LoginSSO extends Login
                 if (isset($field)) {
                     \XF::db()->update('xf_user_field_value',
                     ['field_id' => $this->options()->sso_external_id,'field_value' =>$payload["external_id"],
-                    'user_id', $user->user_id
+                    'user_id', $user->user_id]
                     );
                 } else {
                     \XF::db()->insert('xf_user_field_value',
                     ['field_id' => $this->options()->sso_external_id,'field_value' =>$payload["external_id"],
-                    'user_id', $user->user_id
+                    'user_id', $user->user_id]
                     );
                 }
             }
