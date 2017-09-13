@@ -81,8 +81,13 @@ class LoginSSO extends Login
                     $field->save();
                 }
             }
-            $loginPlugin->completeLogin($user, false);
             
+            $loginPlugin->completeLogin($user, false);
+            if (strpos( $payload["avatar_url"], 'gravatar.com/' ) !== false) {
+                $avatarService = $this->service('XF:User\Avatar', $user);
+                $avatarService->setGravatar($payload["email"]);
+            }
+
             if (isset($payload["add_groups"])) {
                 $group_finder = \XF::finder('XF:UserGroup');
                 $payload["add_groups"] = explode(',', $payload["add_groups"]);
