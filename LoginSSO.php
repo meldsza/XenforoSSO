@@ -89,13 +89,16 @@ class LoginSSO extends Login
             }
 
             if (isset($payload["add_groups"])) {
-                $group_finder = \XF::finder('XF:UserGroup');
                 $payload["add_groups"] = explode(',', $payload["add_groups"]);
                 $payload["add_groups"] = array_map(
-                function ($g) use ($group_finder) {
+                function ($g) {
+                    $group_finder = \XF::finder('XF:UserGroup');
                     $group = $group_finder->where('title', $g)->fetchOne();
                     if (isset($group)) {
-                        return $group->user_group_id;
+                        {
+                            echo $group->title;
+                            return $group->user_group_id;
+                        }
                     } else {
                         return null;
                     }
@@ -105,6 +108,8 @@ class LoginSSO extends Login
             }
             
             if (isset($payload["moderator"]) && $payload["moderator"] == "true") {
+                $user->is_staff = true;
+                $user->save();
                 $generalModerator = $this->em()->find('XF:Moderator', $user->user_id);
                 if (!$generalModerator) {
                     $generalModerator = $this->em()->create('XF:Moderator');
@@ -119,6 +124,8 @@ class LoginSSO extends Login
                 }
             }
             if (isset($payload["admin"]) && $payload["admin"] == "true") {
+                $user->is_staff = true;
+                $user->save();
                 $superAdmin = $this->em()->find('XF:Admin', $user->user_id);
                 if (!$superAdmin) {
                     $superAdmin = $this->em()->create('XF:Admin');
