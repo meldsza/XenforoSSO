@@ -16,9 +16,9 @@ class LoginSSO extends Login
             return $this->login();
         } else {
             $sso = $this->randomNumber(10);
-            $session->set('sso_nounce', $sso);
+            $session->set('sso_nonce', $sso);
             $session->save();
-            $sso = "nounce=$sso&return_sso_url=".$this->request->getHostUrl().'/login';
+            $sso = "nonce=$sso&return_sso_url=".$this->request->getHostUrl().'/login';
             $sso = base64_encode($sso);
             $sig = hash_hmac('sha256', $sso, $this->options()->sso_secret);
             $sso_url = $this->options()->sso_url;
@@ -44,9 +44,9 @@ class LoginSSO extends Login
             $sso = base64_decode($sso);
             parse_str($sso, $payload);
             
-            $nounce = $session->get('sso_nounce');
-            if ($nounce != $payload["nounce"]) {
-                return $this->error("NOUNCE MISMATCH", 500);
+            $nonce = $session->get('sso_nonce');
+            if ($nonce != $payload["nonce"]) {
+                return $this->error("nonce MISMATCH", 500);
             }
             $loginPlugin = $this->plugin('XF:Login');
             $field = $this->em()->findOne('XF:UserFieldValue', ['field_id' => $this->options()->sso_external_id, 'field_value' => $payload["external_id"]]);
