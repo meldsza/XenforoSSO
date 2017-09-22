@@ -81,7 +81,6 @@ class LoginSSO extends Login
                     $field->save();
                 }
             }
-            
             $loginPlugin->completeLogin($user, false);
             if (strpos( $payload["avatar_url"], 'gravatar.com/' ) !== false) {
                 $avatarService = $this->service('XF:User\Avatar', $user);
@@ -139,6 +138,9 @@ class LoginSSO extends Login
                     $superAdmin->delete();
                 }
             }
+            $userProfile = $user->getRelationOrDefault('Profile');
+            $userProfile->rebuildUserFieldValuesCache();
+            $user->rebuildUserGroupRelations();
             return $this->redirect($this->buildLink('forums'));
         } else {
             return $this->error('SIG MISMATCH', 500);
