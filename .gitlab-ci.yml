@@ -5,6 +5,6 @@ deploy-stage:
   stage: deploy
   script:
     - cd /opt/revive/community.revive.network/src/addons/Meldsza/XenforoSSO
-    - git pull
+    - sudo git pull
   only:
     - master
