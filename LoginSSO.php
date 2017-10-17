@@ -25,6 +25,22 @@ class LoginSSO extends Login
             return $this->redirect("$sso_url?sso=$sso&sig=$sig");
         }
     }
+    public function actionLogin()
+    {
+        $session = $this->session();
+        if ($this->filter('sso', 'str')) {
+            return $this->login();
+        } else {
+            $sso = $this->randomNumber(10);
+            $session->set('sso_nonce', $sso);
+            $session->save();
+            $sso = "nonce=$sso&return_sso_url=".$this->request->getHostUrl().'/login';
+            $sso = base64_encode($sso);
+            $sig = hash_hmac('sha256', $sso, $this->options()->sso_secret);
+            $sso_url = $this->options()->sso_url;
+            return $this->redirect("$sso_url?sso=$sso&sig=$sig");
+        }
+    }
     function randomNumber($length)
     {
         $result = '';
